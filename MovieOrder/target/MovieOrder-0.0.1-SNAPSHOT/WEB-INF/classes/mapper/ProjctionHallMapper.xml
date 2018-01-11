@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.movie.dao.ProjctionHallMapper">
+  <resultMap id="BaseResultMap" type="com.hand.movie.bean.ProjctionHall">
+    <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+    <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+    <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+  </resultMap>
+  <resultMap id="WithSeatResultMap" type="com.hand.movie.bean.ProjctionHall">
+    <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+    <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+    <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+
+    <!-- 指定联合查询出的字段的封装 -->
+   <!-- <association property="movie" javaType="com.hand.movie.bean.Movie">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+      <result column="director" jdbcType="VARCHAR" property="director" />
+      <result column="stars" jdbcType="VARCHAR" property="stars" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="language" jdbcType="VARCHAR" property="language" />
+      <result column="time" jdbcType="VARCHAR" property="time" />
+      <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      &lt;!&ndash;<result column="picture" jdbcType="LONGVARBINARY" property="picture" />&ndash;&gt;
+      <result column="show_time" jdbcType="TIMESTAMP" property="showTime" />
+
+    </association>
+    &lt;!&ndash; 指定联合查询出的字段的封装 &ndash;&gt;
+    <association property="seat" javaType="com.hand.movie.bean.Seat">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="row" jdbcType="INTEGER" property="row" />
+      <result column="seat" jdbcType="INTEGER" property="seat" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </association>-->
+    <collection property="movie" ofType="com.hand.movie.bean.Movie">
+      <id column="movie_id" jdbcType="INTEGER" property="movieId" />
+      <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+      <result column="director" jdbcType="VARCHAR" property="director" />
+      <result column="stars" jdbcType="VARCHAR" property="stars" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="language" jdbcType="VARCHAR" property="language" />
+      <result column="time" jdbcType="VARCHAR" property="time" />
+      <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      <result column="show_time" jdbcType="TIMESTAMP" property="showTime" />
+
+    </collection>
+    <collection property="seat" ofType="com.hand.movie.bean.Seat">
+      <id column="seat_id" jdbcType="INTEGER" property="seatId" />
+      <result column="row" jdbcType="INTEGER" property="row" />
+      <result column="seat" jdbcType="INTEGER" property="seat" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </collection>
+
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    proj_hall_id, projection__hall_name, broadcasting_time
+  </sql>
+
+  <sql id="WithSeat_Column_List">
+    p.proj_hall_id, p.projection__hall_name, p.broadcasting_time,
+    m.movie_id,m.movie_name,m.director,m.stars,m.type,m.language,m.time,
+    m.introduction,m.price,m.picture,m.show_time,
+    s.seat_id,s.row,s.seat,s.status
+  </sql>
+
+  <!--List<ProjctionHall> selectByExampleWithSeat(ProjctionHallExample example);
+
+    ProjctionHall selectByPrimaryKeyWithSeat(Integer id);-->
+  <select id="selectByExampleWithSeat" parameterType="com.hand.movie.bean.ProjctionHallExample" resultMap="WithSeatResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithSeat_Column_List" />
+    from `projection_hall` p,`seat` s,`seat_projection_hall` sph,`movie` m,
+    `movie_projection_hall` mph
+    WHERE p.`proj_hall_id` = sph.`projection_hall_id` AND
+    s.`seat_id` = sph.`seat_id` AND
+    p.`proj_hall_id` = mph.`projection_hall_id`AND
+    m.`movie_id` = mph.`movie_id`
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKeyWithSeat" parameterType="java.lang.Integer" resultMap="WithSeatResultMap">
+    select
+    <include refid="WithSeat_Column_List" />
+    from `projection_hall` p,`seat` s,`seat_projection_hall` sph,`movie` m,
+    `movie_projection_hall` mph
+    where p.`proj_hall_id` = #{id,jdbcType=INTEGER} AND p.`proj_hall_id` = sph.`projection_hall_id` AND
+    s.`seat_id` = sph.`seat_id` AND
+    p.`proj_hall_id` = mph.`projection_hall_id`AND
+    m.`movie_id` = mph.`movie_id`
+  </select>
+
+
+  <select id="selectByExample" parameterType="com.hand.movie.bean.ProjctionHallExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from projection_hall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from projection_hall
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from projection_hall
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hand.movie.bean.ProjctionHallExample">
+    delete from projection_hall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hand.movie.bean.ProjctionHall">
+    insert into projection_hall (id, projection__hall_name, broadcasting_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectionHallName,jdbcType=VARCHAR}, #{broadcastingTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hand.movie.bean.ProjctionHall">
+    insert into projection_hall
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectionHallName != null">
+        projection__hall_name,
+      </if>
+      <if test="broadcastingTime != null">
+        broadcasting_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectionHallName != null">
+        #{projectionHallName,jdbcType=VARCHAR},
+      </if>
+      <if test="broadcastingTime != null">
+        #{broadcastingTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hand.movie.bean.ProjctionHallExample" resultType="java.lang.Long">
+    select count(*) from projection_hall
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update projection_hall
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectionHallName != null">
+        projection__hall_name = #{record.projectionHallName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.broadcastingTime != null">
+        broadcasting_time = #{record.broadcastingTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update projection_hall
+    set id = #{record.id,jdbcType=INTEGER},
+      projection__hall_name = #{record.projectionHallName,jdbcType=VARCHAR},
+      broadcasting_time = #{record.broadcastingTime,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hand.movie.bean.ProjctionHall">
+    update projection_hall
+    <set>
+      <if test="projectionHallName != null">
+        projection__hall_name = #{projectionHallName,jdbcType=VARCHAR},
+      </if>
+      <if test="broadcastingTime != null">
+        broadcasting_time = #{broadcastingTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hand.movie.bean.ProjctionHall">
+    update projection_hall
+    set projection__hall_name = #{projectionHallName,jdbcType=VARCHAR},
+      broadcasting_time = #{broadcastingTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

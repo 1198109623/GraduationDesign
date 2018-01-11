@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.movie.dao.CinemaMapper">
+  <resultMap id="BaseResultMap" type="com.hand.movie.bean.Cinema">
+    <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+  </resultMap>
+  <resultMap id="WithPMSResultMap" type="com.hand.movie.bean.Cinema">
+    <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <!-- 指定联合查询出的字段的封装 -->
+    <collection property="projctionHall" ofType="com.hand.movie.bean.ProjctionHall">
+      <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+      <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+      <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+    </collection>
+
+    <collection property="movie" ofType="com.hand.movie.bean.Movie">
+      <id column="movie_id" jdbcType="INTEGER" property="movieId" />
+      <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+      <result column="director" jdbcType="VARCHAR" property="director" />
+      <result column="stars" jdbcType="VARCHAR" property="stars" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="language" jdbcType="VARCHAR" property="language" />
+      <result column="time" jdbcType="VARCHAR" property="time" />
+      <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      <!--<result column="picture" jdbcType="LONGVARBINARY" property="picture" />-->
+      <result column="show_time" jdbcType="TIMESTAMP" property="showTime" />
+
+    </collection>
+    <!-- 指定联合查询出的字段的封装 -->
+    <collection property="seat" ofType="com.hand.movie.bean.Seat">
+      <id column="seat_id" jdbcType="INTEGER" property="seatId" />
+      <result column="row" jdbcType="INTEGER" property="row" />
+      <result column="seat" jdbcType="INTEGER" property="seat" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+    </collection>
+
+  </resultMap>
+  <resultMap id="WithProjectionHallResultMap" type="com.hand.movie.bean.Cinema">
+    <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+
+    <collection property="projctionHall" ofType="com.hand.movie.bean.ProjctionHall">
+      <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+      <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+      <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+    </collection>
+
+    <collection property="cinemaProjectionHalls" ofType="com.hand.movie.bean.CinemaProjectionHall">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+      <result column="projection_hall_id" jdbcType="INTEGER" property="projectionHallId" />
+    </collection>
+
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cinema_id, cinema_name, address, telephone
+  </sql>
+
+  <sql id="WithPMS_Column_List">
+    ci.cinema_id, ci.cinema_name, ci.address, ci.telephone,
+    p.proj_hall_id,p.projection__hall_name,p.broadcasting_time,
+    m.movie_id,m.movie_name,m.director,m.stars,m.type,m.language,m.time,
+    m.introduction,m.price,m.picture,m.show_time,
+    s.seat_id,s.row,s.seat,s.status
+  </sql>
+
+  <sql id="WithProjectionHall_Column_List">
+    cph.id, ci.cinema_id,ci.cinema_name, ci.address, ci.telephone,
+    p.proj_hall_id,p.projection__hall_name,p.broadcasting_time
+  </sql>
+
+  <!--List<Cinema> selectByExampleWithProjHall(CinemaExample example);
+
+    Cinema selectByPrimaryKeyWithProjHall(Integer id);-->
+
+  <select id="selectByExampleWithPMS"  resultMap="WithPMSResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithPMS_Column_List" />
+    from `cinema` ci , `projection_hall` p , `cinema_projection_hall` cph,
+    `seat` s,`seat_projection_hall` sph,`movie` m,
+    `movie_projection_hall` mph
+    WHERE ci.`cinema_id` = cph.`cinema_id` AND
+    p.`proj_hall_id` = cph.`projection_hall_id` AND
+    p.`proj_hall_id` = mph.`projection_hall_id`AND
+    m.`movie_id` = mph.`movie_id` AND
+    p.`proj_hall_id` = sph.`projection_hall_id` AND
+    s.`seat_id` = sph.`seat_id`
+
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKeyWithPMS" parameterType="java.lang.Integer" resultMap="WithPMSResultMap">
+    select
+    <include refid="WithPMS_Column_List" />
+    from `cinema` ci , `projection_hall` p , `cinema_projection_hall` cph,
+    `seat` s,`seat_projection_hall` sph,`movie` m,
+    `movie_projection_hall` mph
+    where ci.id = #{id,jdbcType=INTEGER} AND  ci.`cinema_id` = cph.`cinema_id` AND
+    p.`proj_hall_id` = cph.`projection_hall_id` AND
+    p.`proj_hall_id` = mph.`projection_hall_id`AND
+    m.`movie_id` = mph.`movie_id` AND
+    p.`proj_hall_id` = sph.`projection_hall_id` AND
+    s.`seat_id` = sph.`seat_id`
+
+  </select>
+
+  <select id="selectByExampleWithProjHall"  resultMap="WithProjectionHallResultMap">
+    select
+
+    <include refid="WithProjectionHall_Column_List" />
+    from `cinema` ci , `projection_hall` p , `cinema_projection_hall` cph
+
+    WHERE ci.`cinema_id` = cph.`cinema_id` AND p.`proj_hall_id` = cph.`projection_hall_id`
+
+    order by ci.cinema_name
+
+  </select>
+
+  <select id="selectByName" parameterType="java.lang.String"  resultMap="WithProjectionHallResultMap">
+    select
+
+    <include refid="WithProjectionHall_Column_List" />
+    from `cinema` ci , `projection_hall` p , `cinema_projection_hall` cph
+
+    WHERE ci.`cinema_name` LIKE concat(concat('%',#{cinema_name,jdbcType=VARCHAR}),'%')
+    AND ci.`cinema_id` = cph.`cinema_id` AND p.`proj_hall_id` = cph.`projection_hall_id`
+
+    order by ci.cinema_name
+
+  </select>
+
+  <select id="selectByPrimaryKeyWithProjHall" parameterType="java.lang.Integer" resultMap="WithProjectionHallResultMap">
+    select
+    <include refid="WithProjectionHall_Column_List" />
+    from `cinema` ci , `projection_hall` p , `cinema_projection_hall` cph,
+    `movie` m,`movie_projection_hall` mph
+    WHERE ci.`cinema_id` = cph.`cinema_id` AND p.`proj_hall_id` = cph.`projection_hall_id` AND
+    p.`proj_hall_id` = mph.`projection_hall_id`AND
+    m.`movie_id` = mph.`movie_id`
+  </select>
+
+  <select id="selectByExample" parameterType="com.hand.movie.bean.CinemaExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cinema
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByCinemaName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from cinema
+    where cinema_name = #{cinema_name,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cinema
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hand.movie.bean.CinemaExample">
+    delete from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hand.movie.bean.Cinema">
+    insert into cinema (id, cinema_name, address, 
+      telephone)
+    values (#{id,jdbcType=INTEGER}, #{cinemaName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hand.movie.bean.Cinema">
+    insert into cinema
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cinemaId != null">
+        cinema_id,
+      </if>
+      <if test="cinemaName != null">
+        cinema_name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cinemaId != null">
+        #{cinema_id,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaName != null">
+        #{cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="countByExample" parameterType="com.hand.movie.bean.CinemaExample" resultType="java.lang.Long">
+    select count(*) from cinema
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cinema
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.cinemaName != null">
+        cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cinema
+    set id = #{record.id,jdbcType=INTEGER},
+      cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      telephone = #{record.telephone,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hand.movie.bean.Cinema">
+    update cinema
+    <set>
+      <if test="record.cinemaName != null">
+        cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.telephone != null">
+        telephone = #{record.telephone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cinema_id = #{record.cinemaId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hand.movie.bean.Cinema">
+    update cinema
+    set cinema_name = #{cinemaName,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR}
+    where cinema_id = #{cinemaId,jdbcType=INTEGER}
+  </update>
+</mapper>
