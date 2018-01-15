@@ -38,7 +38,7 @@
 
 
 		<!-- table指定每个表的生成策略 -->
-		<table tableName="movie" domainObjectName="Movie"></table>
+		<!--<table tableName="movie" domainObjectName="Movie"></table>-->
 		<!--<table tableName="cinema" domainObjectName="Cinema"></table>-->
 		<!--<table tableName="order" domainObjectName="Order"></table>-->
 		<!--<table tableName="projection_hall" domainObjectName="ProjectionHall"></table>-->
@@ -46,5 +46,6 @@
 		<!--<table tableName="user" domainObjectName="User"></table>-->
 		<!--<table tableName="evaluation" domainObjectName="Evaluation"></table>-->
 		<!--<table tableName="cinema_projection_hall" domainObjectName="CinemaProjectionHall"></table>-->
+		<table tableName="movie_projection_hall" domainObjectName="MovieProjectionHall"></table>
 	</context>
 </generatorConfiguration>

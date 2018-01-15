@@ -55,7 +55,7 @@
             src="${APP_PATH }/static/js/my.js"></script>
 </head>
 <body>
-<!-- 影院修改的模态框 -->
+<!-- 电影修改的模态框 -->
 <div class="modal fade" id="empUpdateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -156,7 +156,7 @@
 
 
 
-<!-- 影院添加的模态框 -->
+<!-- 电影添加的模态框 -->
 <div class="modal fade" id="empAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -262,7 +262,7 @@
     <!-- 标题 -->
     <div class="row">
         <div class="col-md-12">
-            <h1>SSM-CRUD</h1>
+            <h3>SSM-CRUD</h3>
         </div>
     </div>
     <!-- 按钮 -->
@@ -504,7 +504,7 @@
 
 
 
-    //点击保存，保存电影院。
+    //点击保存，保存电影。
     $("#emp_save_btn").click(function(){
         //1、模态框中填写的表单数据提交给服务器进行保存
 
@@ -516,7 +516,7 @@
 
 
 
-        //2、发送ajax请求保存电影院
+        //2、发送ajax请求保存电影
         $.ajax({
             url:"${APP_PATH}/movie",
             type:"POST",
@@ -594,7 +594,7 @@
     $(document).on("click",".edit_btn",function(){
 
         reset_form("#empUpdateModal form");
-        //1、查出电影信息，显示电影院信息
+        //1、查出电影信息，显示电影信息
         getMovie($(this).attr("edit-id"));
 
         //2、把电影的id传递给模态框的更新按钮
@@ -635,10 +635,10 @@
         });
     }
 
-    //点击更新，更新电影院信息
+    //点击更新，更新电影信息
     $("#emp_update_btn").click(function(){
         console.log($("#empUpdateModal form").serialize());
-        //发送ajax请求保存更新的电影院数据
+        //发送ajax请求保存更新的电影数据
         $.ajax({
             url:"${APP_PATH}/movie/"+$(this).attr("edit-id"),
             type:"PUT",

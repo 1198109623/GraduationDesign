@@ -162,6 +162,7 @@ public class MovieController {
             byte[] data = imageByte.setImageToByte(imageByte,MovieController.fileName);
             movie.setPicture(data);
             int flag = movieService.saveMovie(movie);
+            MovieController.fileName = null;
             if (flag == 1){
                 String error = "数据库中已有此数据，请勿重复插入!";
                 return Msg.fail().add("error",error);
