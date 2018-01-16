@@ -1,11 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hand.movie.dao.MovieProjectionHallMapper">
-  <resultMap id="BaseResultMap" type="com.hand.movie.bean.MovieProjectionHall">
+<mapper namespace="com.hand.movie.dao.MovieProjHallMapper">
+  <resultMap id="BaseResultMap" type="com.hand.movie.bean.MovieProjHall">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="movie_id" jdbcType="INTEGER" property="movieId" />
     <result column="projection_hall_id" jdbcType="INTEGER" property="projectionHallId" />
+    <result column="mp_time" jdbcType="TIMESTAMP" property="mpTime" />
+    <result column="mp_price" jdbcType="DOUBLE" property="mpPrice" />
   </resultMap>
+
+  <resultMap id="WithMPResultMap" type="com.hand.movie.bean.MovieProjHall">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="movie_id" jdbcType="INTEGER" property="movieId" />
+    <result column="projection_hall_id" jdbcType="INTEGER" property="projectionHallId" />
+    <result column="mp_time" jdbcType="TIMESTAMP" property="mpTime" />
+    <result column="mp_price" jdbcType="DOUBLE" property="mpPrice" />
+
+    <association property="movie" javaType="com.hand.movie.bean.Movie">
+      <id column="movie_id" jdbcType="INTEGER" property="movieId" />
+      <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+      <result column="director" jdbcType="VARCHAR" property="director" />
+      <result column="stars" jdbcType="VARCHAR" property="stars" />
+      <result column="type" jdbcType="VARCHAR" property="type" />
+      <result column="language" jdbcType="VARCHAR" property="language" />
+      <result column="time" jdbcType="VARCHAR" property="time" />
+      <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+      <result column="price" jdbcType="DOUBLE" property="price" />
+      <result column="show_time" jdbcType="DATE" property="showTime" />
+    </association>
+
+    <association property="projctionHall" javaType="com.hand.movie.bean.ProjctionHall">
+      <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+      <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+      <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+    </association>
+  </resultMap>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -65,9 +95,50 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, movie_id, projection_hall_id
+    id, movie_id, projection_hall_id, mp_time, mp_price
   </sql>
-  <select id="selectByExample" parameterType="com.hand.movie.bean.MovieProjectionHallExample" resultMap="BaseResultMap">
+
+  <sql id="WithMP_Column_List">
+    mp.id, mp.movie_id, mp.projection_hall_id,mp.mp_time,mp.mp_price,
+    p.projection__hall_name,
+    m.movie_name
+  </sql>
+
+  <select id="selectByExampleWithMP" parameterType="com.hand.movie.bean.MovieProjHallExample" resultMap="WithMPResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithMP_Column_List" />
+    from movie_projection_hall mp,movie m,projection_hall p
+    WHERE mp.movie_id = m.movie_id AND
+    mp.projection_hall_id = p.proj_hall_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="selectByExampleWithMPBypName" parameterType="java.lang.String" resultMap="WithMPResultMap">
+    select
+    <include refid="WithMP_Column_List" />
+    from movie_projection_hall mp,movie m,projection_hall p
+    WHERE mp.movie_id = m.movie_id AND
+    mp.projection_hall_id = p.proj_hall_id AND
+    p.projection__hall_name LIKE concat(concat('%',#{projection__hall_name,jdbcType=VARCHAR}),'%')
+  </select>
+
+  <select id="selectByPrimaryKeyWithMP" parameterType="java.lang.Integer" resultMap="WithMPResultMap">
+    select
+    <include refid="WithMP_Column_List" />
+    from movie_projection_hall mp,movie m,projection_hall p
+    WHERE p.id = #{id,jdbcType=INTEGER} AND mp.movie_id = m.movie_id AND
+    mp.projection_hall_id = p.proj_hall_id
+  </select>
+
+  <select id="selectByExample" parameterType="com.hand.movie.bean.MovieProjHallExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -91,19 +162,19 @@
     delete from movie_projection_hall
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.hand.movie.bean.MovieProjectionHallExample">
+  <delete id="deleteByExample" parameterType="com.hand.movie.bean.MovieProjHallExample">
     delete from movie_projection_hall
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.hand.movie.bean.MovieProjectionHall">
-    insert into movie_projection_hall (id, movie_id, projection_hall_id
-      )
-    values (#{id,jdbcType=INTEGER}, #{movieId,jdbcType=INTEGER}, #{projectionHallId,jdbcType=INTEGER}
-      )
+  <insert id="insert" parameterType="com.hand.movie.bean.MovieProjHall">
+    insert into movie_projection_hall (id, movie_id, projection_hall_id, 
+      mp_time, mp_price)
+    values (#{id,jdbcType=INTEGER}, #{movieId,jdbcType=INTEGER}, #{projectionHallId,jdbcType=INTEGER}, 
+      #{mpTime,jdbcType=TIMESTAMP}, #{mpPrice,jdbcType=DOUBLE})
   </insert>
-  <insert id="insertSelective" parameterType="com.hand.movie.bean.MovieProjectionHall">
+  <insert id="insertSelective" parameterType="com.hand.movie.bean.MovieProjHall">
     insert into movie_projection_hall
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -114,6 +185,12 @@
       </if>
       <if test="projectionHallId != null">
         projection_hall_id,
+      </if>
+      <if test="mpTime != null">
+        mp_time,
+      </if>
+      <if test="mpPrice != null">
+        mp_price,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -126,9 +203,15 @@
       <if test="projectionHallId != null">
         #{projectionHallId,jdbcType=INTEGER},
       </if>
+      <if test="mpTime != null">
+        #{mpTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpPrice != null">
+        #{mpPrice,jdbcType=DOUBLE},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.hand.movie.bean.MovieProjectionHallExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.hand.movie.bean.MovieProjHallExample" resultType="java.lang.Long">
     select count(*) from movie_projection_hall
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -146,6 +229,12 @@
       <if test="record.projectionHallId != null">
         projection_hall_id = #{record.projectionHallId,jdbcType=INTEGER},
       </if>
+      <if test="record.mpTime != null">
+        mp_time = #{record.mpTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mpPrice != null">
+        mp_price = #{record.mpPrice,jdbcType=DOUBLE},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,12 +244,14 @@
     update movie_projection_hall
     set id = #{record.id,jdbcType=INTEGER},
       movie_id = #{record.movieId,jdbcType=INTEGER},
-      projection_hall_id = #{record.projectionHallId,jdbcType=INTEGER}
+      projection_hall_id = #{record.projectionHallId,jdbcType=INTEGER},
+      mp_time = #{record.mpTime,jdbcType=TIMESTAMP},
+      mp_price = #{record.mpPrice,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.hand.movie.bean.MovieProjectionHall">
+  <update id="updateByPrimaryKeySelective" parameterType="com.hand.movie.bean.MovieProjHall">
     update movie_projection_hall
     <set>
       <if test="movieId != null">
@@ -169,13 +260,21 @@
       <if test="projectionHallId != null">
         projection_hall_id = #{projectionHallId,jdbcType=INTEGER},
       </if>
+      <if test="mpTime != null">
+        mp_time = #{mpTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mpPrice != null">
+        mp_price = #{mpPrice,jdbcType=DOUBLE},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.hand.movie.bean.MovieProjectionHall">
+  <update id="updateByPrimaryKey" parameterType="com.hand.movie.bean.MovieProjHall">
     update movie_projection_hall
     set movie_id = #{movieId,jdbcType=INTEGER},
-      projection_hall_id = #{projectionHallId,jdbcType=INTEGER}
+      projection_hall_id = #{projectionHallId,jdbcType=INTEGER},
+      mp_time = #{mpTime,jdbcType=TIMESTAMP},
+      mp_price = #{mpPrice,jdbcType=DOUBLE}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

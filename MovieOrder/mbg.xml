@@ -46,6 +46,6 @@
 		<!--<table tableName="user" domainObjectName="User"></table>-->
 		<!--<table tableName="evaluation" domainObjectName="Evaluation"></table>-->
 		<!--<table tableName="cinema_projection_hall" domainObjectName="CinemaProjectionHall"></table>-->
-		<table tableName="movie_projection_hall" domainObjectName="MovieProjectionHall"></table>
+		<table tableName="movie_projection_hall" domainObjectName="MovieProjHall"></table>
 	</context>
 </generatorConfiguration>

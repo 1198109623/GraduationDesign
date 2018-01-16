@@ -1,16 +1,17 @@
 package com.hand.movie.bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class MovieProjectionHallExample {
+public class MovieProjHallExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public MovieProjectionHallExample() {
+    public MovieProjHallExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -281,6 +282,126 @@ public class MovieProjectionHallExample {
 
         public Criteria andProjectionHallIdNotBetween(Integer value1, Integer value2) {
             addCriterion("projection_hall_id not between", value1, value2, "projectionHallId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeIsNull() {
+            addCriterion("mp_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeIsNotNull() {
+            addCriterion("mp_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeEqualTo(Date value) {
+            addCriterion("mp_time =", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeNotEqualTo(Date value) {
+            addCriterion("mp_time <>", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeGreaterThan(Date value) {
+            addCriterion("mp_time >", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("mp_time >=", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeLessThan(Date value) {
+            addCriterion("mp_time <", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeLessThanOrEqualTo(Date value) {
+            addCriterion("mp_time <=", value, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeIn(List<Date> values) {
+            addCriterion("mp_time in", values, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeNotIn(List<Date> values) {
+            addCriterion("mp_time not in", values, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeBetween(Date value1, Date value2) {
+            addCriterion("mp_time between", value1, value2, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpTimeNotBetween(Date value1, Date value2) {
+            addCriterion("mp_time not between", value1, value2, "mpTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceIsNull() {
+            addCriterion("mp_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceIsNotNull() {
+            addCriterion("mp_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceEqualTo(Double value) {
+            addCriterion("mp_price =", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceNotEqualTo(Double value) {
+            addCriterion("mp_price <>", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceGreaterThan(Double value) {
+            addCriterion("mp_price >", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceGreaterThanOrEqualTo(Double value) {
+            addCriterion("mp_price >=", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceLessThan(Double value) {
+            addCriterion("mp_price <", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceLessThanOrEqualTo(Double value) {
+            addCriterion("mp_price <=", value, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceIn(List<Double> values) {
+            addCriterion("mp_price in", values, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceNotIn(List<Double> values) {
+            addCriterion("mp_price not in", values, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceBetween(Double value1, Double value2) {
+            addCriterion("mp_price between", value1, value2, "mpPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMpPriceNotBetween(Double value1, Double value2) {
+            addCriterion("mp_price not between", value1, value2, "mpPrice");
             return (Criteria) this;
         }
     }

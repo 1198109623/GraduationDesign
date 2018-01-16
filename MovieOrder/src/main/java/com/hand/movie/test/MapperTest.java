@@ -36,6 +36,8 @@ public class MapperTest {
     @Autowired
     CinemaProjectionHallMapper cinemaProjectionHallMapper;
 
+    @Autowired
+    MovieProjHallMapper mpMapper;
 
     public MapperTest() throws IOException {
     }
@@ -92,5 +94,10 @@ public class MapperTest {
 //        Projection_Hall-Movie-Seat
 //        System.out.println(projctionHallMapper.selectByExampleWithSeat(null));
 
+
+//        Projection_Hall-Movie
+//        System.out.println(mpMapper.selectByExampleWithMP(null));
+//        System.out.println(mpMapper.selectByPrimaryKeyWithMP(1));
+        System.out.println(mpMapper.selectByExampleWithMPBypName("一号放映厅"));
     }
 }

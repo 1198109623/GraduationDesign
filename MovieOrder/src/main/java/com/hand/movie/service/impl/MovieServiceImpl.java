@@ -64,7 +64,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     /**
-     * 电影院更新
+     * 电影删除
      * @param movie
      */
     public void updateMovie(Movie movie) {

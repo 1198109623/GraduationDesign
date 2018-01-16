@@ -44,9 +44,7 @@ public class MovieController {
     @RequestMapping(value="/movie/{id}",method= RequestMethod.GET)
     @ResponseBody
     public Msg getMovieById(@PathVariable("id") Integer id){
-
         Movie movie = movieService.getMovie(id);
-//        System.out.println(cinema.getProjctionHall());
         return Msg.success().add("movie", movie);
     }
 
@@ -73,7 +71,9 @@ public class MovieController {
     }
 
 
-
+    /*
+     * 分页查询电影所有信息
+     */
     @RequestMapping(value="/movies",method= RequestMethod.GET)
     @ResponseBody
     public Msg getAll(
@@ -86,6 +86,16 @@ public class MovieController {
         System.out.println("list.size():"+list.size());
         PageInfo page = new PageInfo(list, 5);
         return Msg.success().add("pageInfo", page);
+    }
+
+    /*
+     * 查询电影所有信息
+     */
+    @RequestMapping(value="/allMovies",method= RequestMethod.GET)
+    @ResponseBody
+    public Msg getAllMovies(){
+        List<Movie> list = movieService.getAll();
+        return Msg.success().add("movies", list);
     }
 
     //处理文件上传
@@ -190,7 +200,7 @@ public class MovieController {
         }
         movieService.updateMovie(movie);
         MovieController.fileName = null;
-        System.out.println("数据");
+//        System.out.println("数据");
         return Msg.success();
     }
 

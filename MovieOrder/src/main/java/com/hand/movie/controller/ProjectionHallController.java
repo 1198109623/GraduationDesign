@@ -17,7 +17,7 @@ public class ProjectionHallController {
     ProjectionHallService projectionHallService;
 
     /**
-     * 返回所有的部门信息
+     * 返回所有的放映厅信息
      */
     @RequestMapping("/projectionHalls")
     @ResponseBody

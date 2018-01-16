@@ -395,7 +395,7 @@ $(function(){
 
 	/*菜单json*/
 	var menu = [
-				{"id":"2","name":"框架案例","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
+				{"id":"2","name":"管理模块","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
 					{"id":"9","name":"电影院","parentId":"2","url":"cinema.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
 					{"id":"20","name":"电影","parentId":"2","url":"movie.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
 				]}

@@ -24,7 +24,7 @@
   <body>
 	<div class="layout-admin">
 		<header class="layout-header">
-			<span class="header-logo">系统框架</span> 
+			<span class="header-logo">电影订票系统后端管理</span>
 			<a class="header-menu-btn" href="javascript:;"><i class="icon-font">&#xe600;</i></a>
 			<ul class="header-bar">
 				<li class="header-bar-role"><a href="javascript:;">超级管理员</a></li>
