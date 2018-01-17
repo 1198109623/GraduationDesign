@@ -7,36 +7,52 @@ public class Order {
 
     private Integer userId;
 
-    private Double orderPrice;
+    private Integer cinemaId;
 
-    private String orderContent;
-
-    private Date creationDate;
-
-    private String cinemaName;
-
-    private Date showtime;
-
-    private String projectionHallName;
+    private Integer mphId;
 
     private String seatNum;
 
+    private String orderCode;
+
+    private Date creationDate;
+
     private User user;
+
+    private Cinema cinema;
+
+    private ProjctionHall projctionHall;
+
+    private Movie movie;
+
+    private MovieProjHall mph;
 
     public Order() {
     }
 
-    public Order(Integer orderId, Integer userId, Double orderPrice, String orderContent, Date creationDate, String cinemaName, Date showtime, String projectionHallName, String seatNum, User user) {
+    public Order(Integer orderId, Integer userId, Integer cinemaId, Integer mphId, String seatNum, String orderCode) {
         this.orderId = orderId;
         this.userId = userId;
-        this.orderPrice = orderPrice;
-        this.orderContent = orderContent;
-        this.creationDate = creationDate;
-        this.cinemaName = cinemaName;
-        this.showtime = showtime;
-        this.projectionHallName = projectionHallName;
+        this.cinemaId = cinemaId;
+        this.mphId = mphId;
         this.seatNum = seatNum;
-        this.user = user;
+        this.orderCode = orderCode;
+    }
+
+    public ProjctionHall getProjctionHall() {
+        return projctionHall;
+    }
+
+    public void setProjctionHall(ProjctionHall projctionHall) {
+        this.projctionHall = projctionHall;
+    }
+
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
     public User getUser() {
@@ -45,6 +61,22 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Cinema getCinema() {
+        return cinema;
+    }
+
+    public void setCinema(Cinema cinema) {
+        this.cinema = cinema;
+    }
+
+    public MovieProjHall getMph() {
+        return mph;
+    }
+
+    public void setMph(MovieProjHall mph) {
+        this.mph = mph;
     }
 
     public Integer getOrderId() {
@@ -63,52 +95,20 @@ public class Order {
         this.userId = userId;
     }
 
-    public Double getOrderPrice() {
-        return orderPrice;
+    public Integer getCinemaId() {
+        return cinemaId;
     }
 
-    public void setOrderPrice(Double orderPrice) {
-        this.orderPrice = orderPrice;
+    public void setCinemaId(Integer cinemaId) {
+        this.cinemaId = cinemaId;
     }
 
-    public String getOrderContent() {
-        return orderContent;
+    public Integer getMphId() {
+        return mphId;
     }
 
-    public void setOrderContent(String orderContent) {
-        this.orderContent = orderContent == null ? null : orderContent.trim();
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public String getCinemaName() {
-        return cinemaName;
-    }
-
-    public void setCinemaName(String cinemaName) {
-        this.cinemaName = cinemaName == null ? null : cinemaName.trim();
-    }
-
-    public Date getShowtime() {
-        return showtime;
-    }
-
-    public void setShowtime(Date showtime) {
-        this.showtime = showtime;
-    }
-
-    public String getProjectionHallName() {
-        return projectionHallName;
-    }
-
-    public void setProjectionHallName(String projectionHallName) {
-        this.projectionHallName = projectionHallName == null ? null : projectionHallName.trim();
+    public void setMphId(Integer mphId) {
+        this.mphId = mphId;
     }
 
     public String getSeatNum() {
@@ -119,19 +119,37 @@ public class Order {
         this.seatNum = seatNum == null ? null : seatNum.trim();
     }
 
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode == null ? null : orderCode.trim();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
                 ", userId=" + userId +
-                ", orderPrice=" + orderPrice +
-                ", orderContent='" + orderContent + '\'' +
-                ", creationDate=" + creationDate +
-                ", cinemaName='" + cinemaName + '\'' +
-                ", showtime=" + showtime +
-                ", projectionHallName='" + projectionHallName + '\'' +
+                ", cinemaId=" + cinemaId +
+                ", mphId=" + mphId +
                 ", seatNum='" + seatNum + '\'' +
+                ", orderCode='" + orderCode + '\'' +
+                ", creationDate=" + creationDate +
                 ", user=" + user +
+                ", cinema=" + cinema +
+                ", projctionHall=" + projctionHall +
+                ", movie=" + movie +
+                ", mph=" + mph +
                 '}';
     }
 }

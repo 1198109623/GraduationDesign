@@ -395,14 +395,17 @@ $(function(){
 
 	/*菜单json*/
 	var menu = [
-				{"id":"2","name":"管理模块","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
-					{"id":"9","name":"电影院","parentId":"2","url":"cinema.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
-					{"id":"20","name":"电影","parentId":"2","url":"movie.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
-				]}
+				{"id":"1","name":"管理模块","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":
+					[
+					{"id":"2","name":"电影院","parentId":"1","url":"cinema.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
+					{"id":"3","name":"电影","parentId":"1","url":"movie.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
+                    {"id":"4","name":"放映厅-电影","parentId":"1","url":"movie_proj.jsp","icon":"","order":"1","isHeader":"0","childMenus":""},
+					]
+				}
 				];
 	initMenu(menu,$(".side-menu"));
 	$(".side-menu > li").addClass("menu-item");
-    setCookie("scclui-skin", blue);
+
 	/*获取菜单icon随机色*/
 	//getMathColor();
 }); 

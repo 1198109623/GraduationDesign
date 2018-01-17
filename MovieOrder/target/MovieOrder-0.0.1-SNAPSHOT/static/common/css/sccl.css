@@ -77,9 +77,9 @@ a cite{font-style: normal; *cursor:pointer;}
 .layout-header{position:relative; border-bottom: 0px solid #33AECC;height:45px;background-color:#33AECC;z-index:1000;}
 .layout-side{position: fixed;display: block;top: 45px;bottom:0px;left:0px; width: 200px;overflow-x: hidden;background-color: #393D49;color: #c2c2c2;z-index:999;}
 .layout-side::-webkit-scrollbar{width: 0px; height: 10px;}
-.layout-main{position: absolute;top:45px;right:0;bottom: 30px;left:200px;width:auto;overflow:hidden;overflow-y: auto;background-color: #fff;z-index:998;}
+.layout-main{position: absolute;top:40px;right:0;bottom: 0px;left:200px;width:auto;overflow:hidden;overflow-y: auto;background-color: #fff;z-index:998;}
 .layout-main-tab{height: 39px;line-height: 39px;overflow: hidden;position: relative;background: #f2f2f2;border-bottom: solid 1px #0e9aef;}
-.layout-main-body{position: absolute;top: 40px;bottom: 0;left: 0;right: 0;overflow:auto;margin:0 0 0 10px;}
+.layout-main-body{position: absolute;top: 0px;bottom: 0;left: 0;right: 0;overflow:auto;margin:0 0 0 10px;}
 .layout-footer{position: fixed; left: 200px; right: 0; bottom: 0; height: 30px;line-height:30px;background-color: #eee;border-top:1px solid #ccc;text-align:center;z-index:998;}
 
 /* 头部 */

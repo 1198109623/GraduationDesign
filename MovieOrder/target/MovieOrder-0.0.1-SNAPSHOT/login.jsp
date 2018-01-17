@@ -15,8 +15,8 @@
 	  <%
 		  pageContext.setAttribute("APP_PATH", request.getContextPath());
 	  %>
-	<link rel="stylesheet" href="${APP_PATH }/common/layui/css/layui.css">
-	<link rel="stylesheet" href="${APP_PATH }/common/css/sccl.css">
+	<link rel="stylesheet" href="${APP_PATH }/static/common/layui/css/layui.css">
+	<link rel="stylesheet" href="${APP_PATH }/static/common/css/sccl.css">
     
   </head>
   

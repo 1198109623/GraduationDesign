@@ -1,6 +1,7 @@
 package com.hand.movie.test;
 
 import com.hand.movie.bean.Movie;
+import com.hand.movie.bean.Order;
 import com.hand.movie.dao.*;
 import com.hand.movie.utils.ImageByte;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext.xml")
@@ -48,8 +50,8 @@ public class MapperTest {
 //        userMapper.insertSelective(new User(null,"admin","admin","0"));
 //
 //        orderMapper.insertSelective(new Order(null,1,12.00,"12","12","12"));
-//        List<Order> list= orderMapper.selectByExampleWithUser(null);
-//        System.out.println(list);
+        List<Order> list= orderMapper.selectByExampleWithUser(null);
+        System.out.println(list);
 
         //Movie
 //        取出数据库中的图片
@@ -98,6 +100,6 @@ public class MapperTest {
 //        Projection_Hall-Movie
 //        System.out.println(mpMapper.selectByExampleWithMP(null));
 //        System.out.println(mpMapper.selectByPrimaryKeyWithMP(1));
-        System.out.println(mpMapper.selectByExampleWithMPBypName("一号放映厅"));
+//        System.out.println(mpMapper.selectByExampleWithMPBypName("一号放映厅"));
     }
 }

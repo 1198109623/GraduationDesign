@@ -2,34 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hand.movie.dao.OrderMapper">
   <resultMap id="BaseResultMap" type="com.hand.movie.bean.Order">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="order_price" jdbcType="DOUBLE" property="orderPrice" />
-    <result column="order_content" jdbcType="VARCHAR" property="orderContent" />
-    <result column="CREATION_DATE" jdbcType="TIMESTAMP" property="creationDate" />
-    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
-    <result column="showtime" jdbcType="TIMESTAMP" property="showtime" />
-    <result column="projection_hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+    <result column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="mph_id" jdbcType="INTEGER" property="mphId" />
     <result column="seat_num" jdbcType="VARCHAR" property="seatNum" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="CREATION_DATE" jdbcType="TIMESTAMP" property="creationDate" />
   </resultMap>
   <resultMap id="WithUserResultMap" type="com.hand.movie.bean.Order">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="order_price" jdbcType="DOUBLE" property="orderPrice" />
-    <result column="order_content" jdbcType="VARCHAR" property="orderContent" />
-    <result column="CREATION_DATE" jdbcType="TIMESTAMP" property="creationDate" />
-    <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
-    <result column="showtime" jdbcType="TIMESTAMP" property="showtime" />
-    <result column="projection_hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+    <result column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+    <result column="mph_id" jdbcType="INTEGER" property="mphId" />
     <result column="seat_num" jdbcType="VARCHAR" property="seatNum" />
+    <result column="order_code" jdbcType="VARCHAR" property="orderCode" />
+    <result column="CREATION_DATE" jdbcType="TIMESTAMP" property="creationDate" />
     <!-- 指定联合查询出的字段的封装 -->
-    <association property="User" javaType="com.hand.movie.bean.User">
+    <association property="user" javaType="com.hand.movie.bean.User">
       <id column="id" jdbcType="INTEGER" property="id" />
       <result column="username" jdbcType="VARCHAR" property="username" />
       <result column="password" jdbcType="VARCHAR" property="password" />
       <result column="mobile" jdbcType="INTEGER" property="mobile" />
       <result column="role" jdbcType="VARCHAR" property="role" />
     </association>
+    <association property="cinema" javaType="com.hand.movie.bean.Cinema">
+      <id column="cinema_id" jdbcType="INTEGER" property="cinemaId" />
+      <result column="cinema_name" jdbcType="VARCHAR" property="cinemaName" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    </association>
+    <association property="projctionHall" javaType="com.hand.movie.bean.ProjctionHall">
+      <id column="proj_hall_id" jdbcType="INTEGER" property="projHallId" />
+      <result column="projection__hall_name" jdbcType="VARCHAR" property="projectionHallName" />
+      <result column="broadcasting_time" jdbcType="VARCHAR" property="broadcastingTime" />
+    </association>
+    <association property="movie" javaType="com.hand.movie.bean.Movie">
+      <id column="movie_id" jdbcType="INTEGER" property="movieId" />
+      <result column="movie_name" jdbcType="VARCHAR" property="movieName" />
+    </association>
+    <association property="mph" javaType="com.hand.movie.bean.MovieProjHall">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="movie_id" jdbcType="INTEGER" property="movieId" />
+      <result column="projection_hall_id" jdbcType="INTEGER" property="projectionHallId" />
+      <result column="mp_time" jdbcType="TIMESTAMP" property="mpTime" />
+      <result column="mp_price" jdbcType="DOUBLE" property="mpPrice" />
+    </association>
+
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -90,25 +109,26 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, order_price, order_content, CREATION_DATE, cinema_name, showtime, projection_hall_name, 
-    seat_num
+    order_id, user_id, cinema_id, mph_id, seat_num, order_code, CREATION_DATE
   </sql>
-  <sql id="WithUser_Column_List">
-    o.id, o.user_id, o.order_price, o.order_content, o.CREATION_DATE, o.cinema_name, o.showtime, o.projection_hall_name,
-    o.seat_num,
-    u.mobile
-  </sql>
-  <!--List<Order> selectByExampleWithUser(OrderExample example);
 
-    Order selectByPrimaryKeyWithUser(Integer id);-->
+  <sql id="WithUser_Column_List">
+    o.order_id,seat_num,order_code,CREATION_DATE,
+    cinema_name,projection__hall_name,movie_name,
+    mp_time,mp_price
+  </sql>
+
   <select id="selectByExampleWithUser" parameterType="com.hand.movie.bean.OrderExample" resultMap="WithUserResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="WithUser_Column_List" />
-    from `order` o,`user` u
-    WHERE o.`user_id` = u.`id`
+    FROM `order` o,cinema,projection_hall,
+    movie,movie_projection_hall,`user`
+    WHERE o.user_id = `user`.user_id AND o.cinema_id = cinema.cinema_id AND
+    o.mph_id = movie_projection_hall.id AND movie.movie_id = movie_projection_hall.movie_id
+    AND projection_hall.proj_hall_id = movie_projection_hall.projection_hall_id
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -119,10 +139,12 @@
   <select id="selectByPrimaryKeyWithUser" parameterType="java.lang.Integer" resultMap="WithUserResultMap">
     select
     <include refid="WithUser_Column_List" />
-    from `order` o,`user` u
-    where o.`id` = #{id,jdbcType=INTEGER} AND o.`user_id` = u.`id`
+    from `order` o,cinema,projection_hall,
+    movie,movie_projection_hall,`user`
+    where o.`id` = #{id,jdbcType=INTEGER} AND o.user_id = `user`.user_id AND o.cinema_id = cinema.cinema_id AND
+    o.mph_id = movie_projection_hall.id AND movie.movie_id = movie_projection_hall.movie_id
+    AND projection_hall.proj_hall_id = movie_projection_hall.projection_hall_id
   </select>
-
 
   <select id="selectByExample" parameterType="com.hand.movie.bean.OrderExample" resultMap="BaseResultMap">
     select
@@ -142,11 +164,11 @@
     select 
     <include refid="Base_Column_List" />
     from order
-    where id = #{id,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from order
-    where id = #{id,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.hand.movie.bean.OrderExample">
     delete from order
@@ -155,73 +177,59 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.hand.movie.bean.Order">
-    insert into order (id, user_id, order_price, 
-      order_content, CREATION_DATE, cinema_name, 
-      showtime, projection_hall_name, seat_num
-      )
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DOUBLE}, 
-      #{orderContent,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{cinemaName,jdbcType=VARCHAR}, 
-      #{showtime,jdbcType=TIMESTAMP}, #{projectionHallName,jdbcType=VARCHAR}, #{seatNum,jdbcType=VARCHAR}
-      )
+    insert into order (order_id, user_id, cinema_id, 
+      mph_id, seat_num, order_code, 
+      CREATION_DATE)
+    values (#{orderId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{cinemaId,jdbcType=INTEGER}, 
+      #{mphId,jdbcType=INTEGER}, #{seatNum,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR}, 
+      #{creationDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.hand.movie.bean.Order">
     insert into order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="orderId != null">
+        order_id,
       </if>
       <if test="userId != null">
         user_id,
       </if>
-      <if test="orderPrice != null">
-        order_price,
+      <if test="cinemaId != null">
+        cinema_id,
       </if>
-      <if test="orderContent != null">
-        order_content,
-      </if>
-      <if test="creationDate != null">
-        CREATION_DATE,
-      </if>
-      <if test="cinemaName != null">
-        cinema_name,
-      </if>
-      <if test="showtime != null">
-        showtime,
-      </if>
-      <if test="projectionHallName != null">
-        projection_hall_name,
+      <if test="mphId != null">
+        mph_id,
       </if>
       <if test="seatNum != null">
         seat_num,
       </if>
+      <if test="orderCode != null">
+        order_code,
+      </if>
+      <if test="creationDate != null">
+        CREATION_DATE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
       </if>
-      <if test="orderPrice != null">
-        #{orderPrice,jdbcType=DOUBLE},
+      <if test="cinemaId != null">
+        #{cinemaId,jdbcType=INTEGER},
       </if>
-      <if test="orderContent != null">
-        #{orderContent,jdbcType=VARCHAR},
-      </if>
-      <if test="creationDate != null">
-        #{creationDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="cinemaName != null">
-        #{cinemaName,jdbcType=VARCHAR},
-      </if>
-      <if test="showtime != null">
-        #{showtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="projectionHallName != null">
-        #{projectionHallName,jdbcType=VARCHAR},
+      <if test="mphId != null">
+        #{mphId,jdbcType=INTEGER},
       </if>
       <if test="seatNum != null">
         #{seatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderCode != null">
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        #{creationDate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -234,32 +242,26 @@
   <update id="updateByExampleSelective" parameterType="map">
     update order
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=INTEGER},
       </if>
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderPrice != null">
-        order_price = #{record.orderPrice,jdbcType=DOUBLE},
+      <if test="record.cinemaId != null">
+        cinema_id = #{record.cinemaId,jdbcType=INTEGER},
       </if>
-      <if test="record.orderContent != null">
-        order_content = #{record.orderContent,jdbcType=VARCHAR},
-      </if>
-      <if test="record.creationDate != null">
-        CREATION_DATE = #{record.creationDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.cinemaName != null">
-        cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.showtime != null">
-        showtime = #{record.showtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.projectionHallName != null">
-        projection_hall_name = #{record.projectionHallName,jdbcType=VARCHAR},
+      <if test="record.mphId != null">
+        mph_id = #{record.mphId,jdbcType=INTEGER},
       </if>
       <if test="record.seatNum != null">
         seat_num = #{record.seatNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderCode != null">
+        order_code = #{record.orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationDate != null">
+        CREATION_DATE = #{record.creationDate,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -268,15 +270,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update order
-    set id = #{record.id,jdbcType=INTEGER},
+    set order_id = #{record.orderId,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=INTEGER},
-      order_price = #{record.orderPrice,jdbcType=DOUBLE},
-      order_content = #{record.orderContent,jdbcType=VARCHAR},
-      CREATION_DATE = #{record.creationDate,jdbcType=TIMESTAMP},
-      cinema_name = #{record.cinemaName,jdbcType=VARCHAR},
-      showtime = #{record.showtime,jdbcType=TIMESTAMP},
-      projection_hall_name = #{record.projectionHallName,jdbcType=VARCHAR},
-      seat_num = #{record.seatNum,jdbcType=VARCHAR}
+      cinema_id = #{record.cinemaId,jdbcType=INTEGER},
+      mph_id = #{record.mphId,jdbcType=INTEGER},
+      seat_num = #{record.seatNum,jdbcType=VARCHAR},
+      order_code = #{record.orderCode,jdbcType=VARCHAR},
+      CREATION_DATE = #{record.creationDate,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -287,40 +287,32 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
-      <if test="orderPrice != null">
-        order_price = #{orderPrice,jdbcType=DOUBLE},
+      <if test="cinemaId != null">
+        cinema_id = #{cinemaId,jdbcType=INTEGER},
       </if>
-      <if test="orderContent != null">
-        order_content = #{orderContent,jdbcType=VARCHAR},
-      </if>
-      <if test="creationDate != null">
-        CREATION_DATE = #{creationDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="cinemaName != null">
-        cinema_name = #{cinemaName,jdbcType=VARCHAR},
-      </if>
-      <if test="showtime != null">
-        showtime = #{showtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="projectionHallName != null">
-        projection_hall_name = #{projectionHallName,jdbcType=VARCHAR},
+      <if test="mphId != null">
+        mph_id = #{mphId,jdbcType=INTEGER},
       </if>
       <if test="seatNum != null">
         seat_num = #{seatNum,jdbcType=VARCHAR},
       </if>
+      <if test="orderCode != null">
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        CREATION_DATE = #{creationDate,jdbcType=TIMESTAMP},
+      </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hand.movie.bean.Order">
     update order
     set user_id = #{userId,jdbcType=INTEGER},
-      order_price = #{orderPrice,jdbcType=DOUBLE},
-      order_content = #{orderContent,jdbcType=VARCHAR},
-      CREATION_DATE = #{creationDate,jdbcType=TIMESTAMP},
-      cinema_name = #{cinemaName,jdbcType=VARCHAR},
-      showtime = #{showtime,jdbcType=TIMESTAMP},
-      projection_hall_name = #{projectionHallName,jdbcType=VARCHAR},
-      seat_num = #{seatNum,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+      cinema_id = #{cinemaId,jdbcType=INTEGER},
+      mph_id = #{mphId,jdbcType=INTEGER},
+      seat_num = #{seatNum,jdbcType=VARCHAR},
+      order_code = #{orderCode,jdbcType=VARCHAR},
+      CREATION_DATE = #{creationDate,jdbcType=TIMESTAMP}
+    where order_id = #{orderId,jdbcType=INTEGER}
   </update>
 </mapper>

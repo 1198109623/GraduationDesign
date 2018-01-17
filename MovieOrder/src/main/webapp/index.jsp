@@ -16,8 +16,8 @@
 		  pageContext.setAttribute("APP_PATH", request.getContextPath());
 	  %>
 
-	<link rel="stylesheet" href="${APP_PATH }/common/css/sccl.css">
-	<link rel="stylesheet" type="text/css" href="${APP_PATH }/common/skin/blue/skin.css" id="layout-skin"/>
+	<link rel="stylesheet" href="${APP_PATH }/static/common/css/sccl.css">
+	<link rel="stylesheet" type="text/css" href="${APP_PATH }/static/common/skin/blue/skin.css" id="layout-skin"/>
     
   </head>
   
@@ -56,23 +56,23 @@
 		<div class="layout-side-arrow"><div class="layout-side-arrow-icon"><i class="icon-font">&#xe60d;</i></div></div>
 		
 		<section class="layout-main">
-			<div class="layout-main-tab">
-				<button class="tab-btn btn-left"><i class="icon-font">&#xe60e;</i></button>
-                <nav class="tab-nav">
-                    <%--<div class="tab-nav-content">--%>
-                        <%--<a href="javascript:;" class="content-tab active" data-id="home.html">首页</a>--%>
-                    <%--</div>--%>
-                </nav>
-                <button class="tab-btn btn-right"><i class="icon-font">&#xe60f;</i></button>
-			</div>
+			<%--<div class="layout-main-tab">--%>
+				<%--<button class="tab-btn btn-left"><i class="icon-font">&#xe60e;</i></button>--%>
+                <%--<nav class="tab-nav">--%>
+                    <%--&lt;%&ndash;<div class="tab-nav-content">&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<a href="javascript:;" class="content-tab active" data-id="home.html">首页</a>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                <%--</nav>--%>
+                <%--<button class="tab-btn btn-right"><i class="icon-font">&#xe60f;</i></button>--%>
+			<%--</div>--%>
 			<div class="layout-main-body">
-				<iframe class="body-iframe" name="iframe0" width="100%" height="99%" src="cinema.jsp" frameborder="0" data-id="home.html" seamless></iframe>
+				<iframe class="body-iframe" name="iframe0" width="100%" height="100%" src="cinema.jsp" frameborder="0" data-id="home.html" seamless></iframe>
 			</div>
 		</section>
-		<div class="layout-footer">&copy;2016 0.1 www.mycodes.net</div>
+		<%--<div class="layout-footer">&copy;2016 0.1 www.mycodes.net</div>--%>
 	</div>
-	<script type="text/javascript" src="${APP_PATH }/common/lib/jquery-1.9.0.min.js"></script>
-	<script type="text/javascript" src="${APP_PATH }/common/js/sccl.js"></script>
-	<script type="text/javascript" src="${APP_PATH }/common/js/sccl-util.js"></script>
+	<script type="text/javascript" src="${APP_PATH }/static/common/lib/jquery-1.9.0.min.js"></script>
+	<script type="text/javascript" src="${APP_PATH }/static/common/js/sccl.js"></script>
+	<script type="text/javascript" src="${APP_PATH }/static/common/js/sccl-util.js"></script>
   </body>
 </html>
